@@ -11,7 +11,7 @@ interface IHistoryFinanceProps{
 
 const HistoryFinance: React.FC <IHistoryFinanceProps>  = ({ tagColor, title, subtitle, amount}) => {
 
-
+  
   return (
     <Container  >
       <Tag color={tagColor}/>

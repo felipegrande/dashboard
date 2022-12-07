@@ -9,6 +9,11 @@ import WalletBox from "../../components/walletBox"
 import listOfMonths from "../../utils/months";
 
 import { Container, Content   } from "./styles";
+import MessageBox from "../../components/MessageBox";
+
+import happyImg from '../../assets/img/happy.svg'
+import sadImg from '../../assets/img/sad.svg'
+import grinning from '../../assets/img/grinning.svg'
 
 
 const Dashboard: React.FC = () => {
@@ -47,6 +52,90 @@ const Dashboard: React.FC = () => {
   }, []);
 
 
+  const totalExpenses = useMemo(() => {
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      let total: number = 0;
+     
+      
+      expenses.forEach(item =>{
+        const date = new Date(item.date);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+
+        if(Number(month) === Number(monthSelected) && Number(year) === Number(yearSelected)){
+            try{
+              total += Number(item.amount)
+            }catch{
+              throw new Error('Invalid')
+          }
+
+        }
+      })
+
+      return total
+      
+  }, [monthSelected ,  yearSelected]);
+
+
+  const totalGains = useMemo(() => {
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      let total: number = 0;
+     
+      
+      gain.forEach(item =>{
+        const date = new Date(item.date);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+
+        if(Number(month) === Number(monthSelected) && Number(year) === Number(yearSelected)){
+            try{
+              total += Number(item.amount)
+            }catch{
+              throw new Error('Invalid')
+          }
+
+        }
+      })
+
+      return total
+      
+  }, [monthSelected ,  yearSelected]);
+
+
+  const totalBalance = useMemo(() => {
+    return  totalGains -  totalExpenses;
+  }, [ totalExpenses, totalGains]);
+
+
+  const message = useMemo(() => {
+    if(totalBalance < 0){
+      return{
+        title: "Que triste!",
+        description: "Neste mês, você gastou mais que deveria.",
+        footerText: "Verifique seus gastos e tente cortar algumas coias desnecessárias.",
+        icon: sadImg
+      } 
+    }else if(totalBalance === 0){
+      return{
+        title: "Ufaa!",
+        description: "Neste mês, você gastou exatamente o que ganhou.",
+        footerText: "Tenha cuidado. No proximo tente poupar o seu dinheiro",
+        icon: grinning
+      }
+    }else{
+      return{
+        title: "Muito Bem!",
+        description: "Sua carteira está positiva!",
+        footerText: "Continue assim. Considere investir o seu saldo.",
+        icon: happyImg
+      }
+
+    }
+  }, [ totalBalance]);
+
+
     return (
       <h1>
         <Container>
@@ -65,7 +154,7 @@ const Dashboard: React.FC = () => {
           <Content>
             <WalletBox
               title='Saldo'
-              amount={150.00}
+              amount={totalBalance}
               footerLabel='Atualizado com base nas entradas e saídas'
               icon="dolar"
               color='#4E41F0'
@@ -73,7 +162,7 @@ const Dashboard: React.FC = () => {
             />
             <WalletBox
               title='Entradas'
-              amount={5000.00}
+              amount={totalGains}
               footerLabel='Atualizado com base nas entradas e saídas'
               icon="arrowUp"
               color='#F7931B'
@@ -81,7 +170,7 @@ const Dashboard: React.FC = () => {
             />
             <WalletBox
               title='Saídas'
-              amount={4850.00}
+              amount={totalExpenses}
               footerLabel='Atualizado com base nas entradas e saídas'
               icon="arrowDown"
               color='#E44C4E'
@@ -89,6 +178,22 @@ const Dashboard: React.FC = () => {
             />
     
           
+          </Content>
+          <Content>
+            <MessageBox
+                title={message.title}
+                description={message.description}
+                footerText={message.footerText}
+                icon={message.icon}
+            
+              />
+            <MessageBox
+                title={message.title}
+                description={message.description}
+                footerText={message.footerText}
+                icon={message.icon}
+            
+              />
           </Content>
         </Container>
       </h1>

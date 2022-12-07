@@ -23,8 +23,6 @@ interface IData {
 const List: React.FC = () => {
   const [data, setData] = useState<IData[]>([]);
   const [monthSelected, setMonthSelected ] = useState<string>(String(new Date().getMonth() + 1));
-  
-
   const [yearSelected, setYearSelected] = useState<string>("2020");
   const [selectedFrequency, setSelectedFrequency] = useState(['recorrente', 'eventual']);
 
@@ -115,7 +113,7 @@ const List: React.FC = () => {
       };
     });
     setData(formattedData);
-  }, [data.length, monthSelected, yearSelected, selectedFrequency, dados]);
+  }, [dados.length, monthSelected, yearSelected, selectedFrequency, dados]);
 
   return (
     <Container>

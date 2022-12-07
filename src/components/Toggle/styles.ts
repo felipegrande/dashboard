@@ -8,7 +8,7 @@ align-items:center;
 `;
 export const ToggleLabel = styled.div`
     color: ${props => props.theme.color.white};
-    margin:  0 0.5rem
+    margin:  0 0.5rem;
 `;
 
 

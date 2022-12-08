@@ -15,6 +15,8 @@ import happyImg from '../../assets/img/happy.svg'
 import sadImg from '../../assets/img/sad.svg'
 import grinning from '../../assets/img/grinning.svg'
 import PieChartBox from '../../components/PieChartBox'
+import HistoryBox from "../../components/HistoryBox";
+
 
 
 
@@ -162,6 +164,62 @@ const Dashboard: React.FC = () => {
 
   },[totalExpenses, totalGains])
 
+  const historyData = useMemo(() => {
+
+      return listOfMonths.map((_,index) => {
+        console.log("entrou", index)
+  
+          let amountEntry = 0;
+          gain.forEach(i => {
+            const date =new Date(i.date);
+            const gainMonth = date.getMonth();
+            const gainYear = date.getFullYear();
+
+            if(gainMonth === index && gainYear  === Number(yearSelected)){
+               try{
+                amountEntry += Number(i.amount);
+               } catch{
+                 throw new Error('error')
+               }
+
+            }
+          });
+         
+          let amountOutput = 0;
+        
+          expenses.forEach(i => {
+            
+            const date =new Date(i.date);
+            const expensesMonth = date.getMonth();
+            const expensesYear = date.getFullYear();
+
+            if(expensesMonth === index && expensesYear  === Number(yearSelected)){
+               try{
+                amountOutput += Number(i.amount);
+                console.log( "ok")
+               } catch{
+                 throw new Error('error')
+               }
+
+            }
+          });
+          console.log("amount",amountOutput, "entr", amountEntry)
+          return{
+            monthNumber: index,
+            month: listOfMonths[index],
+            amountOutput,
+            amountEntry
+          
+
+          }
+
+      })
+  },[yearSelected])
+
+
+
+  
+
     return (
       <h1>
         <Container>
@@ -214,6 +272,12 @@ const Dashboard: React.FC = () => {
             
               />
             <PieChartBox data={relationExpensesVersusGains}/>
+          </Content>
+          <Content>
+            <HistoryBox
+            data={historyData}
+             lineCollorAmountOutput="#F7931B"
+              lineCollorAmountEntry="#E44C4E"/>
           </Content>
         </Container>
       </h1>

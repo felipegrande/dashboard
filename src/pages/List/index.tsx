@@ -73,7 +73,7 @@ const List: React.FC = () => {
   }, []);
 
   const handleFrequencyClick = (frequency: string) => {
-    console.log("antes", selectedFrequency)
+  
 
       // findIndex retorna o index que o elemente esta no array
       //find retornar o elemento que esta no array
@@ -88,7 +88,7 @@ const List: React.FC = () => {
 
       }
 
-      console.log("depois", selectedFrequency)
+
 
    
 

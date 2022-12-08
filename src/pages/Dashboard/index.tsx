@@ -14,6 +14,8 @@ import MessageBox from "../../components/MessageBox";
 import happyImg from '../../assets/img/happy.svg'
 import sadImg from '../../assets/img/sad.svg'
 import grinning from '../../assets/img/grinning.svg'
+import PieChartBox from '../../components/PieChartBox'
+
 
 
 const Dashboard: React.FC = () => {
@@ -50,7 +52,6 @@ const Dashboard: React.FC = () => {
       };
     });
   }, []);
-
 
   const totalExpenses = useMemo(() => {
 
@@ -110,6 +111,7 @@ const Dashboard: React.FC = () => {
 
 
   const message = useMemo(() => {
+    
     if(totalBalance < 0){
       return{
         title: "Que triste!",
@@ -131,10 +133,34 @@ const Dashboard: React.FC = () => {
         footerText: "Continue assim. Considere investir o seu saldo.",
         icon: happyImg
       }
+     
 
     }
   }, [ totalBalance]);
 
+  const relationExpensesVersusGains = useMemo(() =>{
+      const total =  totalExpenses + totalGains
+      const gainsPercent =  (totalGains/total) * 100
+      const expensesPercent =  (totalExpenses/total) * 100
+
+      const data = [
+        {
+          name: 'Entradas',
+          value: Number(totalGains),
+          percent: Number(gainsPercent.toFixed(0)),
+          color: '#F7931B'
+
+        },
+        {
+          name: 'Saídas',
+          value: Number(totalExpenses),
+          percent: Number(expensesPercent.toFixed(0)),
+          color: '#E44C4E'
+        }
+      ]
+      return data;
+
+  },[totalExpenses, totalGains])
 
     return (
       <h1>
@@ -187,13 +213,7 @@ const Dashboard: React.FC = () => {
                 icon={message.icon}
             
               />
-            <MessageBox
-                title={message.title}
-                description={message.description}
-                footerText={message.footerText}
-                icon={message.icon}
-            
-              />
+            <PieChartBox data={relationExpensesVersusGains}/>
           </Content>
         </Container>
       </h1>

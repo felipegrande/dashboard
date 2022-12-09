@@ -16,6 +16,7 @@ import sadImg from '../../assets/img/sad.svg'
 import grinning from '../../assets/img/grinning.svg'
 import PieChartBox from '../../components/PieChartBox'
 import HistoryBox from "../../components/HistoryBox";
+import BarChartBox from "../../components/BarChartBox";
 
 
 
@@ -167,7 +168,7 @@ const Dashboard: React.FC = () => {
   const historyData = useMemo(() => {
 
       return listOfMonths.map((_,index) => {
-        console.log("entrou", index)
+    
   
           let amountEntry = 0;
           gain.forEach(i => {
@@ -196,14 +197,14 @@ const Dashboard: React.FC = () => {
             if(expensesMonth === index && expensesYear  === Number(yearSelected)){
                try{
                 amountOutput += Number(i.amount);
-                console.log( "ok")
+            
                } catch{
                  throw new Error('error')
                }
 
             }
           });
-          console.log("amount",amountOutput, "entr", amountEntry)
+    
           return{
             monthNumber: index,
             month: listOfMonths[index],
@@ -217,7 +218,51 @@ const Dashboard: React.FC = () => {
   },[yearSelected])
 
 
+  const relationsExpensevesRecurrentVersusEnventual = useMemo(() => {
+    let amountRecurent = 0
+    let amountEventual = 0
 
+      expenses.filter((expense) => {
+        const date = new Date(expense.date);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+
+        return Number(month) === Number(monthSelected) && Number(year) === Number(yearSelected)
+      })
+      .forEach((expense) => {
+        if(expense.frequency === 'recorrente'){
+          return amountRecurent += Number(expense.amount)
+        } 
+        if(expense.frequency === 'eventual'){
+          return amountEventual += Number(expense.amount)
+        } 
+
+       
+
+      });
+
+      const total = amountRecurent + amountEventual;
+      
+      console.log("hora da verdade", amountRecurent, "toamra ", amountEventual)
+
+      return[
+        {
+          name: 'Recorrente',
+          amount: amountRecurent,
+          percent: Number(((amountEventual / total)*100).toFixed(0)),
+          color: '#F7931B'
+        },
+        {
+          name: 'Eventual',
+          amount: amountEventual,
+          percent: Number(((amountEventual / total)*100).toFixed(0)),
+          color: '#E44C4E'
+        }
+      ]
+      
+
+
+  },[monthSelected, yearSelected])
   
 
     return (
@@ -278,6 +323,10 @@ const Dashboard: React.FC = () => {
             data={historyData}
              lineCollorAmountOutput="#F7931B"
               lineCollorAmountEntry="#E44C4E"/>
+          </Content>
+          <Content>
+            <BarChartBox dados={relationsExpensevesRecurrentVersusEnventual} />
+            
           </Content>
         </Container>
       </h1>

@@ -1,24 +1,23 @@
+import { Container, ToggleLabel, ToggleSelector } from "./styles";
 
-import { Container , ToggleLabel, ToggleSelector  } from "./styles";
+interface IToggleProps{
+    labelLeft: string,
+    labelRigth: string,
+    checked:  boolean;
+    onChange(): void;
+}
 
-
-
-
-const Toggle: React.FC = () => {
-
-
-
-
-
-
-
-
-
+const Toggle: React.FC <IToggleProps> = ({labelLeft, labelRigth , checked , onChange}) => {
   return (
     <Container>
-      <ToggleLabel> Ligth</ToggleLabel>
-      < ToggleSelector  onChange={() => console.log("mudou")}  checked  uncheckedIcon={false}  checkedIcon={false}/> 
-      <ToggleLabel> Dark</ToggleLabel>
+      <ToggleLabel> {labelLeft}</ToggleLabel>
+      <ToggleSelector
+        onChange={onChange}
+        checked={checked}
+        uncheckedIcon={false}
+        checkedIcon={false}
+      />
+      <ToggleLabel> {labelRigth}</ToggleLabel>
     </Container>
   );
 };

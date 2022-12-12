@@ -243,19 +243,20 @@ const Dashboard: React.FC = () => {
 
       const total = amountRecurent + amountEventual;
       
-      console.log("hora da verdade", amountRecurent, "toamra ", amountEventual)
+      const PercentRecurrent =  Number(((amountRecurent / total)*100).toFixed(0))
+      const PercentEventual = Number(((amountEventual / total)*100).toFixed(0))
 
       return[
         {
           name: 'Recorrente',
           amount: amountRecurent,
-          percent: Number(((amountRecurent / total)*100).toFixed(0)),
+          percent: PercentRecurrent ?  PercentRecurrent : 0 ,
           color: '#F7931B'
         },
         {
           name: 'Eventual',
           amount: amountEventual,
-          percent: Number(((amountEventual / total)*100).toFixed(0)),
+          percent: PercentEventual ? PercentEventual : 0 ,
           color: '#E44C4E'
         }
       ]
@@ -264,6 +265,54 @@ const Dashboard: React.FC = () => {
 
   },[monthSelected, yearSelected])
   
+
+
+  const relationsGainsRecurrentVersusEnventual = useMemo(() => {
+    let amountRecurent = 0
+    let amountEventual = 0
+
+      gain.filter((gain) => {
+        const date = new Date(gain.date);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+
+        return Number(month) === Number(monthSelected) && Number(year) === Number(yearSelected)
+      })
+      .forEach((gain) => {
+        if(gain.frequency === 'recorrente'){
+          return amountRecurent += Number(gain.amount)
+        } 
+        if(gain.frequency === 'eventual'){
+          return amountEventual += Number(gain.amount)
+        } 
+
+       
+
+      });
+
+      const total = amountRecurent + amountEventual;
+      
+      const PercentRecurrent =  Number(((amountRecurent / total)*100).toFixed(0))
+      const PercentEventual = Number(((amountEventual / total)*100).toFixed(0))
+
+      return[
+        {
+          name: 'Recorrente',
+          amount: amountRecurent,
+          percent: PercentRecurrent ?  PercentRecurrent : 0 ,
+          color: '#F7931B'
+        },
+        {
+          name: 'Eventual',
+          amount: amountEventual,
+          percent: PercentEventual ? PercentEventual : 0 ,
+          color: '#E44C4E'
+        }
+      ]
+      
+
+
+  },[monthSelected, yearSelected])
 
     return (
       <h1>
@@ -326,7 +375,7 @@ const Dashboard: React.FC = () => {
           </Content>
           <Content>
             <BarChartBox title="Entradas" data={relationsExpensevesRecurrentVersusEnventual} />
-            <BarChartBox title="Saídas" data={relationsExpensevesRecurrentVersusEnventual} />
+            <BarChartBox title="Saídas" data={relationsGainsRecurrentVersusEnventual} />
             
           </Content>
         </Container>

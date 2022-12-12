@@ -12,8 +12,8 @@ import {useAuth} from '../../hooks/auth'
 
 const Signin: React.FC = () => {
 
-    const [email, setEmail] = useState<string>("a")
-    const [password, setPassoword] = useState<string>("a")
+    const [email, setEmail] = useState("")
+    const [password, setPassoword] = useState("")
 
     const {signIn} = useAuth();
 

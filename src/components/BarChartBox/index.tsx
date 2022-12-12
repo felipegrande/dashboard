@@ -1,7 +1,10 @@
-import {Container} from './styles';
+
+import {Container , SideLeft, SideRight , LegendContainer,  Legend} from './styles';
+import {ResponsiveContainer, BarChart , Bar, Cell} from 'recharts'
 
 interface IBarChartBoxProps {
-    dados: {
+    title: string,
+    data: {
         name: string,
         amount: number
         percent: number,
@@ -11,10 +14,46 @@ interface IBarChartBoxProps {
 }
 
 
-const BarChartBox: React.FC<IBarChartBoxProps> = (dados) => {
+const BarChartBox: React.FC<IBarChartBoxProps> = ( {title,data}) => {
     return (
       <Container>
-        Bar char
+        
+            
+        <SideLeft>
+                <h2>{title}</h2>
+                <LegendContainer>
+                    {data.map((i) => (
+                    <Legend key={i.name} color={i.color}>
+                        <div>
+                        <p className="value">{i.percent}% </p>
+                        </div>
+                        <span>{i.name}</span>
+                    </Legend>
+                    ))}
+      </LegendContainer>
+             
+        </SideLeft>
+        <SideRight>
+            <ResponsiveContainer>
+                <BarChart data={data}>
+                    <Bar  dataKey="amount">
+                        {
+                            data.map((i) =>(
+                                <Cell
+                                    key={i.name}
+                                    fill={i.color}
+                                    cursor="pointer"
+                                
+                                />
+                            ))
+                        }
+                    </Bar>
+                  
+
+                </BarChart>
+            </ResponsiveContainer>
+            
+        </SideRight>
        
       </Container>
     );

@@ -249,7 +249,7 @@ const Dashboard: React.FC = () => {
         {
           name: 'Recorrente',
           amount: amountRecurent,
-          percent: Number(((amountEventual / total)*100).toFixed(0)),
+          percent: Number(((amountRecurent / total)*100).toFixed(0)),
           color: '#F7931B'
         },
         {
@@ -325,7 +325,8 @@ const Dashboard: React.FC = () => {
               lineCollorAmountEntry="#E44C4E"/>
           </Content>
           <Content>
-            <BarChartBox dados={relationsExpensevesRecurrentVersusEnventual} />
+            <BarChartBox title="Entradas" data={relationsExpensevesRecurrentVersusEnventual} />
+            <BarChartBox title="Saídas" data={relationsExpensevesRecurrentVersusEnventual} />
             
           </Content>
         </Container>
